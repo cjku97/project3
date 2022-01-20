@@ -41,6 +41,7 @@ class Graph:
         """
         n = len(self.adj_mat)
         mst = np.zeros((n,n))
+        mstWeight = 0
         inMST = [False] * n
         edgeHeap = []
         # define starting node (default 0 but could be anything)
@@ -65,19 +66,24 @@ class Graph:
         		# add edge to mst
         		mst[u][v] = nextEdge[0]
         		# since the graph is undirected, add symmetrical edge to mst
-        		mst[v][u] = nextEdge[0] 
+        		mst[v][u] = nextEdge[0]
+        		# add edge weight to total mst weight
+        		mstWeight += nextEdge[0]
         		# add edges from v to edgeHeap
         		for w in range(0,n):
         			if not(self.adj_mat[v][w] == 0):
         				hq.heappush(edgeHeap, (self.adj_mat[v][w], v, w))
         self.mst = mst
+        self.mst_weight = mstWeight
 
-'''
+
 test = Graph('./data/small.csv')
 test.construct_mst()
 print("Final MST:")
 print(test.mst)
-
+print("Final MST Weight:")
+print(test.mst_weight)
+'''
 test2 = Graph('./data/no_span.csv')
 test2.construct_mst()
 
