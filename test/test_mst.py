@@ -28,10 +28,16 @@ def check_mst(adj_mat: np.ndarray,
         return abs(a - b) < allowed_error
 
     total = 0
+    numEdges = 0
     for i in range(mst.shape[0]):
         for j in range(i+1):
-            total += mst[i, j]
+        	if not(mst[i,j] == 0):
+        		total += mst[i, j]
+        		numEdges += 1
+    
     assert approx_equal(total, expected_weight), 'Proposed MST has incorrect expected weight'
+    assert numEdges == len(adj_mat) - 1, 'Proposed MST has unexpected number of edges'
+    
 
 
 def test_mst_small():
@@ -59,4 +65,17 @@ def test_mst_single_cell_data():
 
 def test_mst_student():
     """ TODO: Write at least one unit test for MST construction """
-    pass
+    g = Graph('./data/other_small.csv')
+    g.construct_mst()
+    assert g.mst_weight == 17
+    check_mst(g.adj_mat, g.mst, 17)
+
+def test_no_span_exception():
+	g = Graph('./data/no_span.csv')
+	with pytest.raises(ValueError, match = "Tree spanning all nodes doesn't exist"):
+		g.construct_mst()
+
+def test_no_span_exception2():
+	g = Graph('./data/no_span2.csv')
+	with pytest.raises(ValueError, match = "Tree spanning all nodes doesn't exist"):
+		g.construct_mst()

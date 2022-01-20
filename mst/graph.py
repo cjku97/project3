@@ -76,14 +76,14 @@ class Graph:
         self.mst = mst
         self.mst_weight = mstWeight
 
-
+'''
 test = Graph('./data/small.csv')
 test.construct_mst()
 print("Final MST:")
 print(test.mst)
 print("Final MST Weight:")
 print(test.mst_weight)
-'''
+
 test2 = Graph('./data/no_span.csv')
 test2.construct_mst()
 
