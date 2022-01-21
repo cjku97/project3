@@ -1,4 +1,4 @@
-# write tests for bfs
+# write tests for mst
 import pytest
 import numpy as np
 from mst import Graph
@@ -26,6 +26,9 @@ def check_mst(adj_mat: np.ndarray,
     """
     def approx_equal(a, b):
         return abs(a - b) < allowed_error
+    
+    def check_symmetric(a):
+    	return np.allclose(a, a.T)
 
     total = 0
     numEdges = 0
@@ -35,8 +38,20 @@ def check_mst(adj_mat: np.ndarray,
         		total += mst[i, j]
         		numEdges += 1
     
+    all_total = 0
+    all_numEdges = 0
+    for i in range(adj_mat.shape[0]):
+        for j in range(i+1):
+        	if not(adj_mat[i,j] == 0):
+        		all_total += adj_mat[i, j]
+        		all_numEdges += 1
+    
     assert approx_equal(total, expected_weight), 'Proposed MST has incorrect expected weight'
     assert numEdges == len(adj_mat) - 1, 'Proposed MST has unexpected number of edges'
+    assert total <= all_total, 'Proposed MST has larger weight than original graph'
+    assert numEdges <= all_numEdges, 'Proposed MST has more edges than original graph'
+    assert check_symmetric(mst), 'Proposed MST is not symmetric (unweighted)'
+    
     
 
 
